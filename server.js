@@ -1,0 +1,76 @@
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+import cors from "cors";
+
+const prisma = new PrismaClient();
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+app.get("/usuarios/", async (req, res) => {
+  const users = await prisma.user.findMany();
+
+  res.status(200).json(users);
+}); /* rota acessadondo usuario */
+
+app.post("/usuarios", async (req, res) => {
+  const user = await prisma.user.create({
+    data: {
+      email: req.body.email,
+      age: req.body.age,
+      name: req.body.name,
+    },
+  });
+  console.log(user);
+  res.status(201).json(user);
+});
+
+app.put("/usuarios/:id", async (req, res) => {
+  console.log(req);
+  const user = await prisma.user.update({
+    where: {
+      id: req.params.id,
+    },
+    data: {
+      email: req.body.email,
+      age: req.body.age,
+      name: req.body.name,
+    },
+  });
+
+  res.status(200).json(user);
+});
+
+app.delete("/usuarios/:id", async (req, res) => {
+  await prisma.user.delete({
+    where: {
+      id: req.params.id,
+    },
+  });
+
+  res.status(200).json({ message: "Usuário  deletado com sucesso!" });
+});
+
+app.listen(3000);
+
+// req - requisição
+// res - resposta
+
+// http://localhost:3000/usuarios
+// user: thiago key: kratosMoney1993
+
+// mongodb+srv://thiago:<db_password>@cluster0.qoezc.mongodb.net/
+//  comando autosave node --watch server.js
+// npx prisma studio
+// npm run dev
+// npm run prisma
+// npx prisma db push -> consolidar informações
+
+// get  -> listar
+// post -> criar
+// put -> ediaatr vários
+// patch -> editar UM
+// delete -> deletar
+
+// async/ await promisse mandar informação
