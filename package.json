@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch server.js",
-    "prisma": "npx prisma studio"
+    "prisma": "npx prisma studio",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
